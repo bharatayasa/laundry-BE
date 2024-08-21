@@ -4,7 +4,7 @@ const moment = require('moment');
 
 module.exports = {
     getAllUsers: async (req, res) => {
-        const sql = "SELECT * FROM User"
+        const sql = "SELECT * FROM User ORDER BY id_user DESC";
 
         try {
             const user = await new Promise((resolve, reject) => {
@@ -20,6 +20,7 @@ module.exports = {
                 id_user: use.id_user,
                 username: use.username, 
                 role: use.role, 
+                created_at: moment(use.created_at).format('DD-MM-YYYY'),
                 deleted_at: moment(use.deleted_at).format('DD-MM-YYYY'),
                 updated_at: moment(use.updated_at).format('DD-MM-YYYY'),
             }))
@@ -49,9 +50,17 @@ module.exports = {
                 })
             })
 
+            const formatUser = user.map(use => ({
+                id_user: use.id_user,
+                username: use.username, 
+                role: use.role, 
+                deleted_at: moment(use.deleted_at).format('DD-MM-YYYY'),
+                updated_at: moment(use.updated_at).format('DD-MM-YYYY'),
+            }))
+
             return res.status(200).json({
                 message: "success to get user By Id", 
-                data: user
+                data: formatUser
             })
         } catch (error) {
             return res.status(500).json({ 
