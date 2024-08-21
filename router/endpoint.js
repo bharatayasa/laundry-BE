@@ -19,12 +19,19 @@ router.put('/user/:id', AccesToken, checkRole('Admin'), user.updateUser);
 router.delete('/user/:id', AccesToken, checkRole('Admin'), user.deleteUser);
 router.put('/user/restore/:id', AccesToken, checkRole('Admin'), user.restoreUser);
 
-const laporan = require('../controller/laporanController')
+const laporan = require('../controller/laporanController');
 router.get('/laporan', AccesToken, checkRole('Admin'), laporan.getAllLaporan);
 
-const pelanggan = require('../controller/pelangganController')
+const pelanggan = require('../controller/pelangganController');
 router.get('/pelanggan', AccesToken, checkRole('Kasir'), pelanggan.getAllPelanggan);
 router.get('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.getPelangganById);
+router.post('/pelanggan', AccesToken, checkRole('Kasir'), pelanggan.addPelanggan);
+router.put('/pelanggan/edit/:id', AccesToken, checkRole('Kasir'), pelanggan.editPelanggan);
+router.delete('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.deletePelanggan);
+router.put('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.restorePelanggan);
+
+const pembayaran = require('../controller/pembayaranController');
+router.get('/pembayaran', AccesToken, checkRole('Kasir'), pembayaran.getAllPembayaran);
 
 const pakaianController = require('../controller/pakaianController');
 router.get('/pakaian', AccesToken, checkRole('Admin'), pakaianController.getAllPakaian);

@@ -52,7 +52,7 @@ module.exports = {
                     resolve(result);
                 });
             });
-    
+
             const formatLaporan = laporans.map(laporan => ({
                 id_laporan: laporan.id_laporan,
                 username: laporan.username,
@@ -65,13 +65,13 @@ module.exports = {
                 status_setrika: laporan.status_setrika,
                 status_pengiriman: laporan.status_pengiriman, 
             }));
-    
+
             return res.status(200).json({
                 status: true,
                 message: "Success to get all laporan", 
                 data: formatLaporan
             });
-    
+
         } catch (error) {
             return res.status(500).json({ 
                 message: 'Database error', 
