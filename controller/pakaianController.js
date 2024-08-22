@@ -2,7 +2,9 @@ const connection = require('../config/db');
 
 module.exports = {
     getAllPakaian: async (req, res) => {
-        const sql = "SELECT * FROM Pakaian"; 
+        const sql = `SELECT 
+                        *
+                    FROM Pakaian`;
     
         try {
             const pakaian = await new Promise((resolve, reject) => {

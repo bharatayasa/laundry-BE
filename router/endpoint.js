@@ -4,7 +4,7 @@ const AccesToken = require('../middleware/auth');
 const checkRole = require('../middleware/checkRole');
 
 const server = require('../controller/serverController');
-router.get('/', server.server); 
+router.get('/', server.server);
 
 const login = require('../controller/auth/login');
 const register = require('../controller/auth/register');
@@ -30,10 +30,10 @@ router.put('/pelanggan/edit/:id', AccesToken, checkRole('Kasir'), pelanggan.edit
 router.delete('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.deletePelanggan);
 router.put('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.restorePelanggan);
 
+const pakaian = require('../controller/pakaianController');
+router.get('/pakaian', AccesToken, checkRole('Kasir'), pakaian.getAllPakaian);
+
 const pembayaran = require('../controller/pembayaranController');
 router.get('/pembayaran', AccesToken, checkRole('Kasir'), pembayaran.getAllPembayaran);
-
-const pakaianController = require('../controller/pakaianController');
-router.get('/pakaian', AccesToken, checkRole('Admin'), pakaianController.getAllPakaian);
 
 module.exports = router;
