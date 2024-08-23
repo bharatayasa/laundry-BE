@@ -30,8 +30,17 @@ router.put('/pelanggan/edit/:id', AccesToken, checkRole('Kasir'), pelanggan.edit
 router.delete('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.deletePelanggan);
 router.put('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.restorePelanggan);
 
+const pendaftaran = require('../controller/pendaftaran'); 
+router.get('/pendaftaran', AccesToken, checkRole('Kasir'), pendaftaran.getAllPendaftaran);
+router.get('/pendaftaran/:id', AccesToken, checkRole('Kasir'), pendaftaran.getPendaftaranById);
+router.post('/pendaftaran', AccesToken, checkRole('Kasir'), pendaftaran.addPendaftaran);
+
 const pakaian = require('../controller/pakaianController');
 router.get('/pakaian', AccesToken, checkRole('Kasir'), pakaian.getAllPakaian);
+router.get('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.getPakaianById);
+router.get('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.getPakaianById);
+router.post('/pakaian', AccesToken, checkRole('Kasir'), pakaian.addPakaian);
+router.put('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.editPakaian);
 
 const pembayaran = require('../controller/pembayaranController');
 router.get('/pembayaran', AccesToken, checkRole('Kasir'), pembayaran.getAllPembayaran);
