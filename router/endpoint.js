@@ -27,8 +27,8 @@ router.get('/pelanggan', AccesToken, checkRole('Kasir'), pelanggan.getAllPelangg
 router.get('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.getPelangganById);
 router.post('/pelanggan', AccesToken, checkRole('Kasir'), pelanggan.addPelanggan);
 router.put('/pelanggan/edit/:id', AccesToken, checkRole('Kasir'), pelanggan.editPelanggan);
-router.delete('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.deletePelanggan);
 router.put('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.restorePelanggan);
+router.delete('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.deletePelanggan);
 
 const pendaftaran = require('../controller/pendaftaran'); 
 router.get('/pendaftaran', AccesToken, checkRole('Kasir'), pendaftaran.getAllPendaftaran);
