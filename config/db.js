@@ -21,7 +21,7 @@ function createConnection() {
 
         connection.on('error', (err) => {
             console.error('Database connection error:', err);
-            if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+            if (err.code === 'ECONNRESET') {
                 console.log('try to connecting...');
                 handleDisconnect();
             } else {

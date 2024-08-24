@@ -16,6 +16,8 @@ module.exports = {
                         User u ON p.id_user = u.id_user
                     INNER JOIN 
                         Pelanggan l ON p.id_pelanggan = l.id_pelanggan
+                    WHERE 
+                        p.deleted_at IS NULL
                     ORDER BY 
                         p.id_pendaftaran DESC;
                     ;`
@@ -75,10 +77,10 @@ module.exports = {
                     INNER JOIN 
                         Pelanggan l ON p.id_pelanggan = l.id_pelanggan
                     WHERE 
-                        id_pendaftaran = ?
+                        p.id_pendaftaran = ?
+                        AND p.deleted_at IS NULL
                     ORDER BY 
-                        p.id_pendaftaran DESC;
-                    ;`
+                        p.id_pendaftaran DESC;`;
 
         try {
             const pendaftarans = await new Promise((resolve, reject) => {
@@ -153,4 +155,93 @@ module.exports = {
             });
         }
     },
+    getUser: async (req, res) => {
+        const sql = "SELECT * FROM User WHERE role = 'Kasir'";
+    
+        try {
+            const pendaftarans = await new Promise((resolve, reject) => {
+                connection.query(sql, (error, result) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result);
+                });
+            });
+    
+            if (pendaftarans.length === 0) {
+                return res.status(404).json({
+                    message: "data not found",
+                    data: pendaftarans
+                });
+            }
+    
+            const formattedPendaftarans = pendaftarans.map(pendaftaran => ({
+                id_user: pendaftaran.id_user, 
+                username: pendaftaran.username
+            }));
+    
+            return res.status(200).json({
+                status: true,
+                message: "success to get all User data",
+                data: formattedPendaftarans
+            });
+    
+        } catch (error) {
+            return res.status(500).json({
+                message: 'internal server error',
+                error: error.message
+            });
+        }
+    }, 
+    updatePendaftaran: async (req, res) => {
+        const id = req.params.id;
+        const {id_pelanggan, id_user} = req.body;
+        const sql = `UPDATE Pendaftaran SET id_pelanggan = ?, id_user = ? WHERE id_pendaftaran = ?`;
+
+        try {
+            const pendaftarans = await new Promise((resolve, reject) => {
+                connection.query(sql, [id_pelanggan, id_user, id], (error, result) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(result)
+                })
+            })
+
+            return res.status(200).json({
+                message: "success to edit pendaftaran", 
+                data: pendaftarans
+            })
+        } catch (error) {
+            return res.status(500).json({ 
+                message: 'internal server error', 
+                error: error.message 
+            });
+        }
+    }, 
+    deletePendaftaran: async (req, res) => {
+        const id = req.params.id;
+        const sql = `UPDATE Pendaftaran SET deleted_at = NOW() WHERE id_pendaftaran = ?`;
+
+        try {
+            const pendaftarans = await new Promise((resolve, reject) => {
+                connection.query(sql, id, (error, result) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(result)
+                })
+            })
+
+            return res.status(200).json({
+                message: "success to delete pendaftaran", 
+                data: pendaftarans
+            })
+        } catch (error) {
+            return res.status(500).json({ 
+                message: 'internal server error', 
+                error: error.message 
+            });
+        }
+    }
 }
