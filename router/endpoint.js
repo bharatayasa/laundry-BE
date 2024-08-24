@@ -41,9 +41,9 @@ router.delete('/pendaftaran/:id', AccesToken, checkRole('Kasir'), pendaftaran.de
 const pakaian = require('../controller/pakaianController');
 router.get('/pakaian', AccesToken, checkRole('Kasir'), pakaian.getAllPakaian);
 router.get('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.getPakaianById);
-router.get('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.getPakaianById);
 router.post('/pakaian', AccesToken, checkRole('Kasir'), pakaian.addPakaian);
 router.put('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.editPakaian);
+router.delete('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.deletePakaian);
 
 const pembayaran = require('../controller/pembayaranController');
 router.get('/pembayaran', AccesToken, checkRole('Kasir'), pembayaran.getAllPembayaran);

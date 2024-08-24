@@ -15,6 +15,8 @@ module.exports = {
                         Pendaftaran d ON p.id_pendaftaran = d.id_pendaftaran
                     INNER JOIN 
                         Pelanggan n ON d.id_pelanggan = n.id_pelanggan
+                    WHERE
+                        p.deleted_at IS NULL
                     ORDER BY
                         p.id_pakaian DESC`;
         try {
@@ -110,30 +112,63 @@ module.exports = {
         }
     },
     editPakaian: async (req, res) => {
-        const id = req.body.id;
-        const {id_pendaftaran, jenis_pakaian, jumlah, berat} = req.body;
+        const id = req.params.id;
+        const { id_pendaftaran, jenis_pakaian, jumlah, berat } = req.body;
         const sql = `UPDATE Pakaian SET id_pendaftaran = ?, jenis_pakaian = ?, jumlah = ?, berat = ? WHERE id_pakaian = ?`;
     
         try {
-            const pakaians = await new Promise((resolve, reject) => {
+            const result = await new Promise((resolve, reject) => {
                 connection.query(sql, [id_pendaftaran, jenis_pakaian, jumlah, berat, id], (error, result) => {
                     if (error) {
-                        reject(error)
+                        return reject(error);
                     }
-                    resolve(result)
-                })
-            })
+                    resolve(result);
+                });
+            });
+    
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    status: false,
+                    message: "Pakaian not found or no changes made"
+                });
+            }
     
             return res.status(200).json({
                 status: true, 
-                message: "success to update pakaian", 
-                data: pakaians, 
-            })
+                message: "Success to update pakaian",
+                data: result
+            });
         } catch (error) {
             return res.status(500).json({
-                message: "failed to update pakaian", 
+                message: "Failed to update pakaian", 
                 error: error
-            })
+            });
+        }
+    }, 
+    deletePakaian: async (req, res) => {
+        const id = req.params.id;
+        const sql = "UPDATE Pakaian SET deleted_at = NOW() WHERE id_pakaian = ?"
+
+        try {
+            const result = await new Promise((resolve, reject) => {
+                connection.query(sql, id, (error, result) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(result);
+                });
+            });
+
+            return res.status(200).json({
+                status: true, 
+                message: "Success to update pakaian",
+                data: result
+            });
+        } catch (error) {
+            return res.status(500).json({
+                message: "Failed to update pakaian", 
+                error: error
+            });
         }
     }
 }
