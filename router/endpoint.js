@@ -19,6 +19,7 @@ router.put('/user/:id', AccesToken, checkRole('Admin'), user.updateUser);
 router.delete('/user/:id', AccesToken, checkRole('Admin'), user.deleteUser);
 router.put('/user/restore/:id', AccesToken, checkRole('Admin'), user.restoreUser);
 
+// todo lanjutkan CRUD dan print .pdf
 const laporan = require('../controller/laporanController');
 router.get('/laporan', AccesToken, checkRole('Admin'), laporan.getAllLaporan);
 
@@ -45,6 +46,7 @@ router.post('/pakaian', AccesToken, checkRole('Kasir'), pakaian.addPakaian);
 router.put('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.editPakaian);
 router.delete('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.deletePakaian);
 
+// todo lanjutkan CRUD, print .pdf, tabel baru untuk harga
 const pembayaran = require('../controller/pembayaranController');
 router.get('/pembayaran', AccesToken, checkRole('Kasir'), pembayaran.getAllPembayaran);
 
