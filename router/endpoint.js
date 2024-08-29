@@ -48,6 +48,8 @@ router.delete('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.deletePaka
 
 // todo lanjutkan CRUD, print .pdf, tabel baru untuk harga
 const pembayaran = require('../controller/pembayaranController');
+// todo, hilangkan perkalian dari masing" fungsi
 router.get('/pembayaran', AccesToken, checkRole('Kasir'), pembayaran.getAllPembayaran);
+router.post('/pembayaran', AccesToken, checkRole('Kasir'), pembayaran.addPembayaran);
 
 module.exports = router;
