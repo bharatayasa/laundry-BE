@@ -52,5 +52,6 @@ router.get('/pembayaran/:id', AccesToken, checkRole('Kasir'), pembayaran.getPemb
 router.post('/pembayaran', AccesToken, checkRole('Kasir'), pembayaran.addPembayaran);
 router.put('/pembayaran/:id', AccesToken, checkRole('Kasir'), pembayaran.updatePembayaran);
 router.delete('/pembayaran/:id', AccesToken, checkRole('Kasir'), pembayaran.deletePembayaran);
+router.get('/pembayaran/download/:id', AccesToken, checkRole('Kasir'), pembayaran.downloadInvoice);
 
 module.exports = router;

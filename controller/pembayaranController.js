@@ -1,5 +1,6 @@
 const connection = require('../config/db');
 const moment = require('moment'); 
+const PDFDocument = require('pdfkit');
 
 const formatRupiah = (angka) => {
     if (typeof angka !== 'number') {
@@ -265,6 +266,116 @@ module.exports = {
                 status: false,
                 message: 'Internal server error',
                 error: error.message
+            });
+        }
+    },
+    downloadInvoice: async (req, res) => {
+        const id = req.params.id;
+    
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide id_pembayaran'
+            });
+        }
+    
+        const sql = `
+            SELECT
+                b.id_pembayaran, 
+                b.id_pendaftaran,
+                b.id_user,
+                b.tanggal_pembayaran,
+                b.status,
+                b.total_biaya,
+                u.username,
+                p.tanggal_pendaftaran,
+                p.id_pelanggan,
+                pl.nama
+            FROM
+                Pembayaran b
+            INNER JOIN
+                Pendaftaran p ON b.id_pendaftaran = p.id_pendaftaran
+            INNER JOIN 
+                User u ON b.id_user = u.id_user
+            INNER JOIN 
+                Pelanggan pl ON p.id_pelanggan = pl.id_pelanggan
+            WHERE 
+                b.id_pembayaran = ?
+        `;
+    
+        try {
+            const pembayaranResult = await new Promise((resolve, reject) => {
+                connection.query(sql, [id], (error, results) => {
+                    if (error) {
+                        console.error("Error fetching pembayaran:", error);
+                        return reject(error);
+                    }
+                    resolve(results);
+                });
+            });
+    
+            if (pembayaranResult.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'No pembayaran found with the provided id_pembayaran'
+                });
+            }
+    
+            const pembayaran = pembayaranResult[0];
+    
+            const doc = new PDFDocument({ margin: 50 });
+    
+            let fileName = `invoice_${id}_${pembayaran.nama}_${moment(pembayaran.tanggal_pembayaran).format('YYYYMMDD')}.pdf`;
+            
+            res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+            res.setHeader('Content-Type', 'application/pdf');
+    
+            doc.pipe(res);
+    
+            doc.fontSize(20).text('Laundry Service Invoice', { align: 'center' });
+            doc.moveDown();
+            doc.fontSize(12).text('JL.IR.H.JUANDA no.374 Denpasar Bali', { align: 'center' });
+            doc.text('Telp: 022-2506374 Hp: 0811228647', { align: 'center' });
+            doc.moveDown();
+    
+            doc.fontSize(12).text(`Invoice ID: ${id}`, { align: 'left' });
+            doc.text(`Nama Pelanggan: ${pembayaran.nama}`, { align: 'left' });
+            doc.text(`Tanggal Pendaftaran: ${moment(pembayaran.tanggal_pendaftaran).format('DD MMMM YYYY')}`, { align: 'left' });
+            doc.text(`Tanggal Pembayaran: ${moment(pembayaran.tanggal_pembayaran).format('DD MMMM YYYY')}`, { align: 'left' });
+            doc.text(`Kasir: ${pembayaran.username}`, { align: 'left' });
+            doc.moveDown();
+    
+            doc.fontSize(12).text('Rincian Pembayaran:', { align: 'left' });
+            doc.moveDown();
+    
+            const tableTop = 250;
+            const itemMargin = 20;
+            let y = tableTop;
+    
+            const table = [
+                ['Deskripsi', 'Detail'],
+                ['Total Biaya:', formatRupiah(pembayaran.total_biaya)],
+                ['Status:', pembayaran.status],
+            ];
+    
+            doc.fontSize(10).text(table[0][0], 50, y);
+            doc.text(table[0][1], 300, y);
+    
+            y += itemMargin;
+    
+            for (let i = 1; i < table.length; i++) {
+                doc.fontSize(10).text(table[i][0], 50, y);
+                doc.text(table[i][1], 300, y);
+                y += itemMargin;
+            }
+    
+            doc.end();
+    
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            return res.status(500).json({
+                success: false,
+                message: 'Internal server error'
             });
         }
     }
