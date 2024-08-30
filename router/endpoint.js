@@ -30,7 +30,7 @@ router.put('/pelanggan/edit/:id', AccesToken, checkRole('Kasir'), pelanggan.edit
 router.put('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.restorePelanggan);
 router.delete('/pelanggan/:id', AccesToken, checkRole('Kasir'), pelanggan.deletePelanggan);
 
-const pendaftaran = require('../controller/pendaftaran'); 
+const pendaftaran = require('../controller/pendaftaranController'); 
 router.get('/pendaftaran', AccesToken, checkRole('Kasir'), pendaftaran.getAllPendaftaran);
 router.get('/pendaftaran/:id', AccesToken, checkRole('Kasir'), pendaftaran.getPendaftaranById);
 router.post('/pendaftaran', AccesToken, checkRole('Kasir'), pendaftaran.addPendaftaran);
@@ -55,8 +55,10 @@ router.get('/pembayaran/download/:id', AccesToken, checkRole('Kasir'), pembayara
 
 const pengolahan = require('../controller/pengolahanController');
 router.get('/pengolahan', AccesToken, checkRole('Pengolahan'), pengolahan.getAllPengolahan);
+router.get('/pengolahan/:id', AccesToken, checkRole('Pengolahan'), pengolahan.getPengolahanById);
 
 const pengiriman = require('../controller/pengirimanController'); 
 router.get('/pengiriman', AccesToken, checkRole('Kurir'), pengiriman.getAllPengiriman);
+router.get('/pengiriman/:id', AccesToken, checkRole('Kurir'), pengiriman.getPengirimanById);
 
 module.exports = router;
