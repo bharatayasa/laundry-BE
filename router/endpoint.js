@@ -19,7 +19,6 @@ router.put('/user/:id', AccesToken, checkRole('Admin'), user.updateUser);
 router.delete('/user/:id', AccesToken, checkRole('Admin'), user.deleteUser);
 router.put('/user/restore/:id', AccesToken, checkRole('Admin'), user.restoreUser);
 
-// todo lanjutkan CRUD dan print .pdf
 const laporan = require('../controller/laporanController');
 router.get('/laporan', AccesToken, checkRole('Admin'), laporan.getAllLaporan);
 
@@ -53,5 +52,11 @@ router.post('/pembayaran', AccesToken, checkRole('Kasir'), pembayaran.addPembaya
 router.put('/pembayaran/:id', AccesToken, checkRole('Kasir'), pembayaran.updatePembayaran);
 router.delete('/pembayaran/:id', AccesToken, checkRole('Kasir'), pembayaran.deletePembayaran);
 router.get('/pembayaran/download/:id', AccesToken, checkRole('Kasir'), pembayaran.downloadInvoice);
+
+const pengolahan = require('../controller/pengolahanController');
+router.get('/pengolahan', AccesToken, checkRole('Pengolahan'), pengolahan.getAllPengolahan);
+
+const pengiriman = require('../controller/pengirimanController'); 
+router.get('/pengiriman', AccesToken, checkRole('Kurir'), pengiriman.getAllPengiriman);
 
 module.exports = router;
