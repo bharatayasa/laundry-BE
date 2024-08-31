@@ -3,7 +3,22 @@ const moment = require('moment');
 
 module.exports = {
     getAllPengiriman: async (req, res) => {
-        const sql = "SELECT * FROM Pengiriman ORDER BY id_pengiriman DESC"; 
+        const sql = `SELECT
+                        p.id_pengiriman,
+                        p.id_pengolahan,
+                        p.id_user,
+                        p.tanggal_pengiriman,
+                        p.status_pengiriman,
+                        l.id_pakaian, 
+                        u.username
+                    FROM 
+                        Pengiriman p
+                    INNER JOIN
+                        Pengolahan l ON p.id_pengolahan = l.id_pengolahan
+                    INNER JOIN 
+                        User u ON p.id_user = u.id_user
+                    ORDER BY 
+                        p.id_pengiriman DESC`; 
 
         try {
             const pengirimans = await new Promise((resolve, reject) => {
@@ -27,8 +42,10 @@ module.exports = {
                 id_pengiriman: pengiriman.id_pengiriman, 
                 id_pengolahan: pengiriman.id_pengolahan, 
                 id_user: pengiriman.id_user, 
-                tanggal_pengiriman: moment(pengiriman.tanggal_pengiriman).format('DD-MM-YYYY'),
+                tanggal_pengiriman: moment(pengiriman.tanggal_pengiriman).format('YYYY-MM-DD'),
                 status_pengiriman: pengiriman.status_pengiriman,
+                username: pengiriman.username,
+                nama:pengiriman.nama
             }))
 
             return res.status(200).json({
