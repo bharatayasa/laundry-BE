@@ -39,7 +39,7 @@ router.put('/pendaftaran/:id', AccesToken, checkRole('Kasir'), pendaftaran.updat
 router.delete('/pendaftaran/:id', AccesToken, checkRole('Kasir'), pendaftaran.deletePendaftaran);
 
 const pakaian = require('../controller/pakaianController');
-router.get('/pakaian', AccesToken, checkRole('Kasir'), pakaian.getAllPakaian);
+router.get('/pakaian', AccesToken, checkRole('Kasir', 'Pengolahan'), pakaian.getAllPakaian);
 router.get('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.getPakaianById);
 router.post('/pakaian', AccesToken, checkRole('Kasir'), pakaian.addPakaian);
 router.put('/pakaian/:id', AccesToken, checkRole('Kasir'), pakaian.editPakaian);
@@ -56,6 +56,8 @@ router.get('/pembayaran/download/:id', AccesToken, checkRole('Kasir'), pembayara
 const pengolahan = require('../controller/pengolahanController');
 router.get('/pengolahan', AccesToken, checkRole('Pengolahan'), pengolahan.getAllPengolahan);
 router.get('/pengolahan/:id', AccesToken, checkRole('Pengolahan'), pengolahan.getPengolahanById);
+router.post('/pengolahan', AccesToken, checkRole('Pengolahan'), pengolahan.addPengolahan);
+router.put('/pengolahan/:id', AccesToken, checkRole('Pengolahan'), pengolahan.updatePengolahan);
 
 const pengiriman = require('../controller/pengirimanController'); 
 router.get('/pengiriman', AccesToken, checkRole('Kurir'), pengiriman.getAllPengiriman);
