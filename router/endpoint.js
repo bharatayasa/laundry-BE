@@ -63,5 +63,9 @@ router.delete('/pengolahan/:id', AccesToken, checkRole('Pengolahan'), pengolahan
 const pengiriman = require('../controller/pengirimanController'); 
 router.get('/pengiriman', AccesToken, checkRole('Kurir'), pengiriman.getAllPengiriman);
 router.get('/pengiriman/:id', AccesToken, checkRole('Kurir'), pengiriman.getPengirimanById);
+router.post('/pengiriman', AccesToken, checkRole('Kurir'), pengiriman.addPengiriman);
+router.put('/pengiriman/:id', AccesToken, checkRole('Kurir'), pengiriman.updatePengiriman);
+router.get('/kurir/pengirirman', AccesToken, checkRole('Kurir'), pengiriman.getKurirByKurir);
+router.delete('/pengiriman/:id', AccesToken, checkRole('Kurir'), pengiriman.deletePengiriman);
 
 module.exports = router;
