@@ -3,7 +3,7 @@ const moment = require('moment');
 
 module.exports = {
     getAllPengolahan: async (req, res) => {
-        const sql = "SELECT * FROM Pengolahan ORDER BY id_pengolahan DESC"
+        const sql = "SELECT * FROM Pengolahan WHERE deleted_at IS NULL ORDER BY id_pengolahan DESC"
 
         try {
             const pengolahans = await new Promise((resolve, reject) => {
@@ -175,4 +175,32 @@ module.exports = {
             });
         }
     },
+    deletePengolahan: async (req, res) => {
+        const sql = "UPDATE Pengolahan SET deleted_at = NOW() WHERE id_pengolahan = ?"
+        const id = req.params.id;
+
+        try {
+            const pengolahans = await new Promise((resolve, reject) => {
+                connection.query(sql, id, (error, result) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(result)
+                })
+            })
+
+            return res.status(200).json({
+                status: true,
+                message: "succes to delete pengolahan", 
+                data: pengolahans
+            })
+
+        } catch (error) {
+            return res.status(500).json({
+                status: false,
+                message: "Internal server error",
+                error: error.message
+            });
+        }
+    }
 }

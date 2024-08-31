@@ -58,6 +58,7 @@ router.get('/pengolahan', AccesToken, checkRole('Pengolahan'), pengolahan.getAll
 router.get('/pengolahan/:id', AccesToken, checkRole('Pengolahan'), pengolahan.getPengolahanById);
 router.post('/pengolahan', AccesToken, checkRole('Pengolahan'), pengolahan.addPengolahan);
 router.put('/pengolahan/:id', AccesToken, checkRole('Pengolahan'), pengolahan.updatePengolahan);
+router.delete('/pengolahan/:id', AccesToken, checkRole('Pengolahan'), pengolahan.deletePengolahan);
 
 const pengiriman = require('../controller/pengirimanController'); 
 router.get('/pengiriman', AccesToken, checkRole('Kurir'), pengiriman.getAllPengiriman);
