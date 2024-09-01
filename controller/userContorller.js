@@ -189,5 +189,39 @@ module.exports = {
                 error: error.message
             })
         }
+    }, 
+    getUserByRole: async (req, res) => {
+        const sql = "SELECT * FROM User WHERE role = ?";
+        const role = 'Admin';
+
+        try {
+            const user = await new Promise((resolve, reject) => {
+                connection.query(sql, [role], (error, result) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(result)
+                } )
+            })
+
+            if (user.length == 0) {
+                return res.status(404).json({
+                    status: false, 
+                    message: "data not found",
+                    data: user
+                })
+            }
+
+            return res.status(200).json({
+                status: true, 
+                message: "success to get user with Admin role", 
+                data: user
+            })
+        } catch (error) {
+            return res.status(500).json({
+                message: "internal server error", 
+                error: error.message
+            })
+        }
     }
 }
