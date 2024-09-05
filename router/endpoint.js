@@ -26,6 +26,7 @@ router.get('/laporan/:id', AccesToken, checkRole('Admin'), laporan.getLaporanByI
 router.post('/laporan', AccesToken, checkRole('Admin'), laporan.addLaporan);
 router.put('/laporan/:id', AccesToken, checkRole('Admin'), laporan.updateLaporan);
 router.delete('/laporan/:id', AccesToken, checkRole('Admin'), laporan.deleteLaporan);
+router.get('/cetak/laporan', AccesToken, checkRole('Admin'), laporan.cetakLaporanPDF);
 
 const pelanggan = require('../controller/pelangganController');
 router.get('/pelanggan', AccesToken, checkRole('Kasir'), pelanggan.getAllPelanggan);

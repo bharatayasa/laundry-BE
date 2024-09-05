@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-const AccesToken = require('../middleware/auth');
-const checkRole = require('../middleware/checkRole');
 dotenv.config();
 
 const secretKey = process.env.JWT_SECRET;
