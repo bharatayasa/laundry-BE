@@ -58,6 +58,7 @@ router.post('/pembayaran', AccesToken, checkRole('Kasir'), pembayaran.addPembaya
 router.put('/pembayaran/:id', AccesToken, checkRole('Kasir'), pembayaran.updatePembayaran);
 router.delete('/pembayaran/:id', AccesToken, checkRole('Kasir'), pembayaran.deletePembayaran);
 router.get('/pembayaran/download/:id', AccesToken, checkRole('Kasir'), pembayaran.downloadInvoice);
+router.get('/admin/pembayaran', AccesToken, checkRole('Admin'), pembayaran.getAllPembayaranByAdmin);
 
 const pengolahan = require('../controller/pengolahanController');
 router.get('/pengolahan', AccesToken, checkRole('Pengolahan', 'Kurir', 'Admin'), pengolahan.getAllPengolahan);
