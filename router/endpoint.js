@@ -11,6 +11,10 @@ const register = require('../controller/auth/register');
 router.post('/login', login.login);
 router.post('/register', register.register);
 
+const toggleUser = require('../controller/toggleUser')
+router.post('/active', toggleUser.aktifUser);
+router.post('/nonactive', toggleUser.nonaktifUser);
+
 const user = require('../controller/userContorller');
 router.get('/user', AccesToken, checkRole('Admin'), user.getAllUsers);
 router.get('/user/:id', AccesToken, checkRole('Admin'), user.getUsersById);
